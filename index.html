@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Surprise ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fef5f0 0%, #ffe4d6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #d4905b;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .message {
+            color: #333;
+            line-height: 1.8;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+
+        .hidden-message {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 10px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .reveal-btn, .game-btn, .back-btn {
+            background: linear-gradient(135deg, #e8b4a8 0%, #d4905b 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .reveal-btn:hover, .game-btn:hover, .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 180, 168, 0.4);
+        }
+
+        .stars {
+            font-size: 3em;
+            margin: 20px 0;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .emoji {
+            display: inline-block;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .note {
+            margin-top: 30px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .games-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .game-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+
+        .game-cell {
+            aspect-ratio: 1;
+            background: #f9f2ed;
+            border: 3px solid #d4905b;
+            border-radius: 10px;
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-cell:hover {
+            background: #e8e8e8;
+            transform: scale(1.05);
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #e8b4a8 0%, #d4905b 100%);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+
+        .memory-card.flipped {
+            background: white;
+            border: 3px solid #d4905b;
+        }
+
+        .memory-card.matched {
+            background: #4CAF50;
+            cursor: default;
+        }
+
+        .word-input {
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid #d4905b;
+            border-radius: 10px;
+            margin: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .game-info {
+            margin: 15px 0;
+            font-size: 1.2em;
+            color: #d4905b;
+            font-weight: bold;
+        }
+
+        .game-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a8 100%);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: #5a4a42;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-card h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="mainContent">
+            <div class="stars">✨</div>
+            <h1>Hi, Viii! <span class="emoji">👋</span></h1>
+            
+            <div class="message">
+                <p>I hope you like the little gift!</p>
+                <p>And I prepared some message for you, hope you read it!</p>
+            </div>
+
+            <button class="reveal-btn" onclick="revealMessage()">Please click me</button>
+
+            <div class="hidden-message" id="hiddenMessage">
+                <h2 style="color: #FF748A; margin-bottom: 15px;">Olaaaa</h2>
+                <p style="color: #333; line-height: 1.8;">
+                    Thank you for going through the trouble of meeting me on such short notice.
+                    Also willing to spend time chatting with a person that you barely know, really appreciate it.
+                </p>
+                <p style="color: #333; line-height: 1.8;">
+                    I hope you like this little suprise, especially with how it ties with your liking for taking photos.
+                </p>
+                <p style="color: #333; line-height: 1.8;">
+                    Perhaps it's a bit cheesy, but I wanted to make a challenge for you to capture some exciting moments with this gift.
+                    And you can share or explain it to me later!
+                </p>
+                <p style="margin-top: 20px; font-weight: bold; color: #FF748A;">
+                    Wishing you a joyful and blessed Christmas! and I hope everything goes your way in the coming year. 🎄✨
+                </p>
+            </div>
+
+            <div class="games-section" id="gamesSection">
+                <h2 style="color: #333; margin-top: 30px;">Play Some Games! 🎮</h2>
+                <p style="color: #666; margin: 10px 0;">Hopefully you can play some of these games during the long flight and have a safe flight!</p>
+                <div class="game-menu">
+                    <div class="game-card" onclick="startGame('minesweeper')">
+                        <h3>💣 Minesweeper</h3>
+                        <p>Find all the safe tiles!</p>
+                    </div>
+                    <div class="game-card" onclick="startGame('memory')">
+                        <h3>🧠 Memory Match</h3>
+                        <p>Find the pairs!</p>
+                    </div>
+                    <div class="game-card" onclick="startGame('word')">
+                        <h3>📝 Word Scramble</h3>
+                        <p>Unscramble the word!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="minesweeperGame" class="game-container">
+            <h2 style="color: #667eea;">Minesweeper 💣</h2>
+            <div class="game-info" id="minesweeperInfo">Mines: 10 | Flags: 0</div>
+            <div class="game-grid" id="minesweeperGrid"></div>
+            <button class="game-btn" onclick="resetMinesweeper()">New Game</button>
+            <button class="back-btn" onclick="backToMain()">Back</button>
+        </div>
+
+        <div id="memoryGame" class="game-container">
+            <h2 style="color: #667eea;">Memory Match 🧠</h2>
+            <div class="game-info" id="memoryInfo">Moves: 0 | Matches: 0/6</div>
+            <div class="game-grid" style="grid-template-columns: repeat(4, 1fr);" id="memoryGrid"></div>
+            <button class="game-btn" onclick="resetMemory()">New Game</button>
+            <button class="back-btn" onclick="backToMain()">Back</button>
+        </div>
+
+        <div id="wordGame" class="game-container">
+            <h2 style="color: #667eea;">Word Scramble 📝</h2>
+            <div class="game-info" id="wordInfo">Score: 0</div>
+            <div style="font-size: 2em; margin: 20px; color: #667eea; font-weight: bold;" id="scrambledWord"></div>
+            <input type="text" class="word-input" id="wordInput" placeholder="Type your answer...">
+            <br>
+            <button class="game-btn" onclick="checkWord()">Submit</button>
+            <button class="game-btn" onclick="skipWord()">Skip</button>
+            <button class="back-btn" onclick="backToMain()">Back</button>
+        </div>
+    </div>
+
+    <script>
+        let messageRevealed = false;
+
+        function revealMessage() {
+            const message = document.getElementById('hiddenMessage');
+            const btn = event.target;
+            const gamesSection = document.getElementById('gamesSection');
+            
+            message.style.display = 'block';
+            btn.style.display = 'none';
+            gamesSection.style.display = 'block';
+            messageRevealed = true;
+        }
+
+        function startGame(game) {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById(game + 'Game').style.display = 'block';
+            
+            if (game === 'minesweeper') initMinesweeper();
+            if (game === 'memory') initMemory();
+            if (game === 'word') initWordScramble();
+        }
+
+        function backToMain() {
+            document.getElementById('mainContent').style.display = 'block';
+            document.querySelectorAll('.game-container').forEach(g => g.style.display = 'none');
+        }
+
+        const GRID_SIZE = 8;
+        const MINE_COUNT = 10;
+        let minesweeperGrid = [];
+        let minesweeperRevealed = [];
+        let minesweeperFlags = [];
+        let gameOver = false;
+        let minesweeperScore = 0;
+
+        function initMinesweeper() {
+            const grid = document.getElementById('minesweeperGrid');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
+            grid.style.maxWidth = `${GRID_SIZE * 40}px`;
+            
+            minesweeperGrid = Array(GRID_SIZE * GRID_SIZE).fill(0);
+            minesweeperRevealed = Array(GRID_SIZE * GRID_SIZE).fill(false);
+            minesweeperFlags = Array(GRID_SIZE * GRID_SIZE).fill(false);
+            gameOver = false;
+            minesweeperScore = 0;
+
+            let minesPlaced = 0;
+            while (minesPlaced < MINE_COUNT) {
+                const randomIndex = Math.floor(Math.random() * (GRID_SIZE * GRID_SIZE));
+                if (minesweeperGrid[randomIndex] !== 'M') {
+                    minesweeperGrid[randomIndex] = 'M';
+                    minesPlaced++;
+                }
+            }
+
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                if (minesweeperGrid[i] !== 'M') {
+                    let count = 0;
+                    const neighbors = getNeighbors(i);
+                    neighbors.forEach(n => {
+                        if (minesweeperGrid[n] === 'M') count++;
+                    });
+                    minesweeperGrid[i] = count;
+                }
+            }
+
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'game-cell';
+                cell.style.fontSize = '1.5em';
+                cell.dataset.index = i;
+                cell.onclick = () => revealCell(i);
+                cell.oncontextmenu = (e) => { e.preventDefault(); toggleFlag(i); };
+                grid.appendChild(cell);
+            }
+            updateMinesweeperInfo();
+        }
+
+        function getNeighbors(index) {
+            const neighbors = [];
+            const row = Math.floor(index / GRID_SIZE);
+            const col = index % GRID_SIZE;
+            
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < GRID_SIZE && c >= 0 && c < GRID_SIZE && !(r === row && c === col)) {
+                        neighbors.push(r * GRID_SIZE + c);
+                    }
+                }
+            }
+            return neighbors;
+        }
+
+        function revealCell(index) {
+            if (gameOver || minesweeperRevealed[index] || minesweeperFlags[index]) return;
+            
+            minesweeperRevealed[index] = true;
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            
+            if (minesweeperGrid[index] === 'M') {
+                cell.textContent = '💣';
+                cell.style.background = '#ff6b6b';
+                gameOver = true;
+                document.getElementById('minesweeperInfo').textContent = 'Game Over! You hit a mine! 💥';
+                revealAllMines();
+            } else {
+                cell.style.background = '#e8d9c9';
+                if (minesweeperGrid[index] > 0) {
+                    cell.textContent = minesweeperGrid[index];
+                    cell.style.color = '#d4905b';
+                }
+                minesweeperScore++;
+                
+                if (minesweeperScore === GRID_SIZE * GRID_SIZE - MINE_COUNT) {
+                    gameOver = true;
+                    document.getElementById('minesweeperInfo').textContent = 'You Won! 🎉';
+                }
+                
+                if (minesweeperGrid[index] === 0) {
+                    getNeighbors(index).forEach(n => {
+                        if (!minesweeperRevealed[n]) revealCell(n);
+                    });
+                }
+            }
+        }
+
+        function toggleFlag(index) {
+            if (gameOver || minesweeperRevealed[index]) return;
+            minesweeperFlags[index] = !minesweeperFlags[index];
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            cell.textContent = minesweeperFlags[index] ? '🚩' : '';
+            updateMinesweeperInfo();
+        }
+
+        function revealAllMines() {
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                if (minesweeperGrid[i] === 'M' && !minesweeperRevealed[i]) {
+                    minesweeperRevealed[i] = true;
+                    const cell = document.querySelector(`[data-index="${i}"]`);
+                    cell.textContent = '💣';
+                    cell.style.background = '#ffb3b3';
+                }
+            }
+        }
+
+        function updateMinesweeperInfo() {
+            const flagCount = minesweeperFlags.filter(f => f).length;
+            document.getElementById('minesweeperInfo').textContent = `Mines: ${MINE_COUNT} | Flags: ${flagCount}`;
+        }
+
+        function resetMinesweeper() {
+            initMinesweeper();
+        }
+
+        const memoryEmojis = ['🌟', '🎨', '🎵', '🌈', '🦋', '🌸'];
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+
+        function initMemory() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            memoryCards = [...memoryEmojis, ...memoryEmojis].sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            
+            memoryCards.forEach((emoji, i) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.emoji = emoji;
+                card.dataset.index = i;
+                card.textContent = '?';
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+            updateMemoryInfo();
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
+                card.classList.add('flipped');
+                card.textContent = card.dataset.emoji;
+                flippedCards.push(card);
+                
+                if (flippedCards.length === 2) {
+                    moves++;
+                    setTimeout(checkMatch, 500);
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.emoji === card2.dataset.emoji) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                
+                if (matchedPairs === 6) {
+                    setTimeout(() => {
+                        document.getElementById('memoryInfo').textContent = `You Won! 🎉 Moves: ${moves}`;
+                    }, 300);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '?';
+                card2.textContent = '?';
+            }
+            
+            flippedCards = [];
+            updateMemoryInfo();
+        }
+
+        function updateMemoryInfo() {
+            document.getElementById('memoryInfo').textContent = `Moves: ${moves} | Matches: ${matchedPairs}/6`;
+        }
+
+        function resetMemory() {
+            initMemory();
+        }
+
+        const words = ['SMILE', 'HAPPY', 'FRIEND', 'COFFEE', 'SUNSHINE', 'MUSIC', 'DANCE', 'DREAM', 'LAUGH', 'HEART', 'ADVENTURE', 'FREEDOM', 'NATURE', 'PEACE', 'JOY', 'LOVE', 'FAMILY', 'HOPE', 'KINDNESS', 'COURAGE'];
+        let currentWord = '';
+        let wordScore = 0;
+
+        function initWordScramble() {
+            wordScore = 0;
+            nextWord();
+        }
+
+        function nextWord() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            const scrambled = currentWord.split('').sort(() => Math.random() - 0.5).join('');
+            document.getElementById('scrambledWord').textContent = scrambled;
+            document.getElementById('wordInput').value = '';
+            updateWordInfo();
+        }
+
+        function checkWord() {
+            const input = document.getElementById('wordInput').value.toUpperCase();
+            if (input === currentWord) {
+                wordScore++;
+                alert('Correct! 🎉');
+                nextWord();
+            } else {
+                alert('Try again! 💭');
+            }
+        }
+
+        function skipWord() {
+            nextWord();
+        }
+
+        function updateWordInfo() {
+            document.getElementById('wordInfo').textContent = `Score: ${wordScore}`;
+        }
+
+        document.getElementById('wordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkWord();
+        });
+    </script>
+</body>
+</html>
